@@ -1,0 +1,4 @@
+#! /bin/sh
+
+# Build from source
+./node_modules/.bin/tsc
