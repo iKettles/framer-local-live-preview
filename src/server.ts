@@ -7,7 +7,6 @@ import proxyService from './services/proxy';
 import { redbird } from './utils/redbird';
 import successResponder from './middleware/response-success';
 import errorResponder from './middleware/response-error';
-import serverConnectionPool from './lib/server-connection-pool';
 import { getLocalIPAddress } from './utils/network';
 
 export const app = express();
@@ -15,7 +14,7 @@ export const app = express();
 const corsOptions: cors.CorsOptions = {
   origin: '*',
   credentials: true,
-  methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE, HEAD'
+  methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE, HEAD',
 };
 
 app.use(cors(corsOptions));
@@ -30,12 +29,11 @@ export async function start() {
     const proxyHosts = proxyService(app, { proxy: redbird, localIPAddress });
     const server = await app.listen(config.apiPort);
     server.setTimeout(60000);
-    setInterval(serverConnectionPool.probe, 1000);
     console.log(
       `Framer Preview Local Proxy running on API Port ${
         config.apiPort
       } and serving using the following hosts:\n ${proxyHosts
-        .map(host => `${host}:${config.proxyPort}`)
+        .map((host) => `${host}:${config.proxyPort}`)
         .join(', ')}`
     );
     console.log(
