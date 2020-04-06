@@ -7,3 +7,4 @@ Dockerfile
 .prettierrc
 .dockerignore
 yarn.lock
+.DS_Store
